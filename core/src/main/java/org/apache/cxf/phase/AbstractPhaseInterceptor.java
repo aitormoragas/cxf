@@ -29,7 +29,7 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageUtils;
 
 /**
- * Provides a starting point implementation for a interceptors that
+ * Provides a starting point implementation for interceptors that
  * participate in phased message processing. Developers should extend from
  * this class when implementing custom interceptors.
  * Developers need to provide an implementation for handleMessage() and

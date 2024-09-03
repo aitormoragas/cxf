@@ -37,6 +37,8 @@ import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import io.opentelemetry.semconv.HttpAttributes;
+import io.opentelemetry.semconv.NetworkAttributes;
+import io.opentelemetry.semconv.ServerAttributes;
 import io.opentelemetry.semconv.UrlAttributes;
 import io.opentelemetry.semconv.incubating.ExceptionIncubatingAttributes;
 
@@ -63,7 +65,10 @@ public abstract class AbstractOpenTelemetryClientProvider extends AbstractTracin
             .setParent(parentContext).setSpanKind(SpanKind.CLIENT)
             .setAttribute(HttpAttributes.HTTP_REQUEST_METHOD, method)
             .setAttribute(UrlAttributes.URL_FULL, uri.toString())
-            // TODO: Enhance with semantics from request
+            .setAttribute(ServerAttributes.SERVER_ADDRESS, uri.getHost())
+            .setAttribute(ServerAttributes.SERVER_PORT, Long.valueOf(uri.getPort()))
+            .setAttribute(NetworkAttributes.NETWORK_PEER_ADDRESS, uri.getHost())
+            .setAttribute(NetworkAttributes.NETWORK_PEER_PORT, Long.valueOf(uri.getPort()))
             .startSpan();
         Scope scope = activeSpan.makeCurrent();
 

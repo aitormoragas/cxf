@@ -56,6 +56,7 @@ public class OpenTelemetryClientStartInterceptor extends AbstractOpenTelemetryCl
                                                                          (String)message
                                                                              .get(Message.HTTP_REQUEST_METHOD));
 
+
         if (holder != null) {
             message.getExchange().put(TRACE_SPAN, holder);
         }

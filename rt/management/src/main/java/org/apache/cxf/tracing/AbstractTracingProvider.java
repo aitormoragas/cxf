@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.cxf.common.util.StringUtils;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.PhaseInterceptorChain;
@@ -76,7 +77,7 @@ public abstract class AbstractTracingProvider {
         }
         return method + " " + path;
     }
-    
+
     private static String safeGet(Message message, String key) {
         if (!message.containsKey(key)) {
             return null;
@@ -84,10 +85,10 @@ public abstract class AbstractTracingProvider {
         Object value = message.get(key);
         return (value instanceof String) ? value.toString() : null;
     }
-    
+
     private static String getUriAsString(Message message) {
         String uri = safeGet(message, Message.REQUEST_URL);
-        
+
         if (uri == null) {
             String address = safeGet(message, Message.ENDPOINT_ADDRESS);
             uri = safeGet(message, Message.REQUEST_URI);
@@ -106,7 +107,7 @@ public abstract class AbstractTracingProvider {
         if (query != null) {
             return uri + "?" + query;
         }
-        
+
         return uri;
     }
 
@@ -117,5 +118,16 @@ public abstract class AbstractTracingProvider {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
+    }
+
+    protected static String getProtocolVersion(Message message) {
+        HttpServletRequest request = (HttpServletRequest)message.getContextualProperty("HTTP.REQUEST");
+        if (request != null) {
+            String protocol = request.getProtocol();
+            if (protocol != null && protocol.contains("/")) {
+                return protocol.split("/")[1];
+            }
+        }
+        return "unknown";
     }
 }

@@ -57,7 +57,7 @@ public class OpenTelemetryFeature extends DelegatingFeature<OpenTelemetryFeature
     }
 
     public static class Portable implements AbstractPortableFeature {
-        private final OpenTelemetryStartInterceptor in;
+        private final OpenTelemetryHttpAttributesInterceptor in;
         private final OpenTelemetryStopInterceptor out;
 
         public Portable() {
@@ -73,12 +73,12 @@ public class OpenTelemetryFeature extends DelegatingFeature<OpenTelemetryFeature
         }
 
         public Portable(final OpenTelemetry openTelemetry, final String instrumentationName) {
-            in = new OpenTelemetryStartInterceptor(openTelemetry, instrumentationName);
+            in = new OpenTelemetryHttpAttributesInterceptor(openTelemetry, instrumentationName);
             out = new OpenTelemetryStopInterceptor(openTelemetry, instrumentationName);
         }
 
         public Portable(final OpenTelemetry openTelemetry, final Tracer tracer) {
-            in = new OpenTelemetryStartInterceptor(openTelemetry, tracer);
+            in = new OpenTelemetryHttpAttributesInterceptor(openTelemetry, tracer);
             out = new OpenTelemetryStopInterceptor(openTelemetry, tracer);
         }
 
